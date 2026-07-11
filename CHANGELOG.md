@@ -13,6 +13,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 ### Security
 
+## [1.0.1] - 2026-07-10
+
+### Changed
+- Rewrote `README.md` to describe the Xbox One Life Chernarus server configuration and repository layout (replacing the inherited workflow-template README).
+
 ## [1.0.0] - 2026-07-10
 
 ### Added

@@ -1,18 +1,25 @@
-# Project Template (Claude Code workflow)
+# One Life — Chernarus (DayZ Server Config)
 
-A GitHub template that bakes a disciplined, Claude-Code-enforced contribution and release
-workflow into any project created from it — fork → `feature/*` → PR into `develop` → review
-→ squash-merge → `develop`→`main` release, with an enforced changelog and CLAUDE.md.
+Server-side mission configuration for the **One Life** DayZ community server on **Xbox One**,
+running the **Chernarus** map. This repository holds the economy, spawn, event, weather, and
+map-object configuration that defines how the server plays.
 
-Enforcement is entirely through Claude Code (committed hooks + repo-level skills), not
-GitHub branch protection or CI.
+## What's in here
 
-## Using this template
+| Path | Purpose |
+|------|---------|
+| `cfg*.xml` / `cfg*.json` | Core server config: economy core, spawnable types, limits, event spawns/groups, weather, gameplay, player spawn points, random presets. |
+| `db/` | Central economy database — `types.xml` (loot), `events.xml`, `economy.xml`, `globals.xml`, `messages.xml`. |
+| `env/` | Animal and infected territory definitions, one file per species. |
+| `mapgroup*.xml`, `mapclusterproto.xml`, `areaflags.map` | Map object group clusters, positions, and prototypes (largely map-editor generated — edit with care). |
+| `init.c` | Mission init script (Enforce Script). |
 
-1. Create a new repository with **Use this template**.
-2. In the new repo, ask Claude to run the **workflow-setup** skill to stamp your canonical
-   repo into `.claude/workflow.json`.
-3. Contributors follow `CONTRIBUTING.md`; maintainers use the review/merge/release skills.
+## Contributing
 
-See `CLAUDE.md` for the full workflow and its guardrails, and `docs/superpowers/` for the
-design spec and this implementation plan.
+Changes follow a Claude-Code-enforced workflow: **fork → `feature/*` branch → PR into
+`develop` → review → squash-merge → `develop`→`main` release**. Every PR updates
+`CHANGELOG.md`, and `CLAUDE.md` is the last file touched before opening a PR.
+
+See `CONTRIBUTING.md` for the contributor steps and `CLAUDE.md` for the full workflow and its
+guardrails. Releases are tracked in `CHANGELOG.md` and on the
+[Releases](https://github.com/dayz-one-life/chernarus/releases) page.
