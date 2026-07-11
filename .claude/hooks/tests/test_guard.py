@@ -433,3 +433,36 @@ def test_main_fail_open_outside_git_repo(tmp_path):
         capture_output=True, text=True, cwd=str(tmp_path),
     )
     assert r.returncode == 0
+
+
+def _init_solo_repo(path):
+    subprocess.run(["git", "init", "-q", str(path)], check=True)
+    subprocess.run(["git", "-C", str(path), "config", "user.email", "t@t.dev"], check=True)
+    subprocess.run(["git", "-C", str(path), "config", "user.name", "T"], check=True)
+    subprocess.run(["git", "-C", str(path), "remote", "add", "origin", "git@github.com:dbd-net/app.git"], check=True)
+    claude = path / ".claude"
+    claude.mkdir()
+    (claude / "workflow.json").write_text(json.dumps({
+        "canonicalRepo": "dbd-net/app", "baseBranch": "develop", "productionBranch": "main",
+        "protectedBranches": ["develop", "main"], "featurePrefix": "feature/", "releasePrefix": "release/",
+        "soloMaintainer": True,
+    }))
+    (path / "CHANGELOG.md").write_text("x\n")
+    subprocess.run(["git", "-C", str(path), "add", "-A"], check=True)
+    subprocess.run(["git", "-C", str(path), "commit", "-qm", "init"], check=True)
+    subprocess.run(["git", "-C", str(path), "branch", "-M", "main"], check=True)
+    subprocess.run(["git", "-C", str(path), "checkout", "-q", "-b", "feature/x"], check=True)
+    sp = path / ".claude" / "plugins" / "mkt" / "superpowers" / "skills" / "s"
+    sp.mkdir(parents=True)
+    (sp / "SKILL.md").write_text("x")
+
+
+def test_solo_flag_allows_feature_commit_from_canonical_clone(tmp_path):
+    _init_solo_repo(tmp_path)
+    env = dict(os.environ, HOME=str(tmp_path))
+    r = subprocess.run(
+        ["python3", str(HOOKS / "guard.py")],
+        input=json.dumps({"tool_name": "Bash", "tool_input": {"command": "git commit -m x"}}),
+        capture_output=True, text=True, cwd=str(tmp_path), env=env,
+    )
+    assert r.returncode == 0

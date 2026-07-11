@@ -231,13 +231,57 @@ def pr_cross_repository(number, cwd=None):
     return None
 
 
+def _pr_field(number, field, cwd=None):
+    args = ["pr", "view"]
+    if number:
+        args.append(str(number))
+    args += ["--json", field, "-q", f".{field}"]
+    try:
+        out = subprocess.run(["gh", *args], cwd=cwd, capture_output=True, text=True)
+    except OSError:
+        return None
+    if out.returncode != 0:
+        return None
+    val = out.stdout.strip()
+    return val or None
+
+
+def pr_base(number, cwd=None):
+    return _pr_field(number, "baseRefName", cwd=cwd)
+
+
+def pr_head(number, cwd=None):
+    return _pr_field(number, "headRefName", cwd=cwd)
+
+
+def pr_reviewed(number, cwd=None):
+    args = ["pr", "view"]
+    if number:
+        args.append(str(number))
+    args += ["--json", "reviews,reviewDecision"]
+    try:
+        out = subprocess.run(["gh", *args], cwd=cwd, capture_output=True, text=True)
+    except OSError:
+        return None
+    if out.returncode != 0:
+        return None
+    try:
+        data = json.loads(out.stdout)
+    except ValueError:
+        return None
+    if data.get("reviewDecision") == "CHANGES_REQUESTED":
+        return False
+    states = {r.get("state") for r in data.get("reviews", [])}
+    return bool(states & {"APPROVED", "COMMENTED"})
+
+
 def gather_context(cwd=None):
     root = wl.repo_root(cwd=cwd)
     if root is None:
         return None
     config = wl.load_config(root)
     canonical = config.get("canonicalRepo") or ""
-    role = wl.detect_role(wl.origin_slug(cwd=cwd), canonical)
+    role = wl.detect_role(wl.origin_slug(cwd=cwd), canonical, solo=bool(config.get("soloMaintainer")))
     branch = wl.current_branch(cwd=cwd) or ""
     changed = wl.changed_files(config.get("baseBranch", "develop"), cwd=cwd)
     changelog_changed = ("CHANGELOG.md" in changed) if changed is not None else True
@@ -252,6 +296,9 @@ def gather_context(cwd=None):
         "pr_approved": None,
         "staged_files": wl.staged_files(),
         "pr_cross_repository": None,
+        "pr_base": None,
+        "pr_head": None,
+        "pr_reviewed": None,
     }
 
 
@@ -272,7 +319,14 @@ def main():
     for action in actions:
         if action["kind"] == "gh-pr-merge":
             num = action.get("pr_number")
-            ctx = dict(ctx, pr_approved=pr_approved(num), pr_cross_repository=pr_cross_repository(num))
+            ctx = dict(
+                ctx,
+                pr_approved=pr_approved(num),
+                pr_cross_repository=pr_cross_repository(num),
+                pr_base=pr_base(num),
+                pr_head=pr_head(num),
+                pr_reviewed=pr_reviewed(num),
+            )
         allow, reason = evaluate(action, ctx)
         if not allow:
             print(reason, file=sys.stderr)
