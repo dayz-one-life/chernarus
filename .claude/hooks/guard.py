@@ -71,7 +71,7 @@ def _classify_segment(seg):
     if prog == "gh":
         nonflags = [a for a in args if not a.startswith("-")]
         if len(nonflags) >= 2 and nonflags[0] == "pr" and nonflags[1] == "create":
-            return {"kind": "gh-pr-create", "base": _flag_value(args, "--base", "-B")}
+            return {"kind": "gh-pr-create", "base": _flag_value(args, "--base", "-B"), "head": _flag_value(args, "--head", "-H")}
         if len(nonflags) >= 2 and nonflags[0] == "pr" and nonflags[1] == "merge":
             squash = "--squash" in args
             other = ("--merge" in args) or ("--rebase" in args)
@@ -159,9 +159,12 @@ def evaluate(action, ctx):
             return True, ""
         if kind == "gh-pr-create":
             base = action.get("base")
+            head = action.get("head")
             if base == production_branch:
                 return True, ""
             if base == base_branch:
+                if head == production_branch:
+                    return True, ""  # back-merge main -> develop: no changelog/claudemd gate
                 if not ctx["changelog_changed"]:
                     return False, "Blocked: update CHANGELOG.md (Unreleased) before opening a PR."
                 if not ctx["claudemd_changed"]:
