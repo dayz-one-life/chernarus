@@ -1,0 +1,13 @@
+{
+  "canonicalRepo": "",
+  "baseBranch": "develop",
+  "productionBranch": "main",
+  "protectedBranches": ["develop", "main"],
+  "featurePrefix": "feature/",
+  "releasePrefix": "release/",
+  "versionScheme": "semver",
+  "commands": {
+    "test": "",
+    "lint": ""
+  }
+}
