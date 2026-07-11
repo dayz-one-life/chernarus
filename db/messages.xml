@@ -1,47 +1,29 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <messages>
-<!--
-See https://community.bistudio.com/wiki/DayZ:Server_Messages for more information
+    <!-- New-player onboarding rotation: each message fires <delay> minutes after a
+         player connects (onconnect) and repeats every 10 minutes for everyone online.
+         Delays are staggered 2/4/6/8/10 so a fresh player sees the rules + the way
+         back within their first ~10 minutes, starting 2 minutes after they connect.
+         Themes interleave: rules -> way-back -> community. -->
 
-Example messages:
-
-1) following message will be displayed to every player in countdown manner
-    and shuts down server in 10 hours from its start
-
+    <!-- Rules (the stakes) -->
     <message>
-        <deadline>600</deadline>
+        <onconnect>1</onconnect>
+        <repeat>5</repeat>
+        <text>One life. One death. A 24-hour timeout to think it over. Welcome to Chernarus.</text>
+    </message>
+
+    <!-- Community link -->
+    <message>
+        <onconnect>1</onconnect>
+        <repeat>5</repeat>
+        <text>Join the pack: discord.gg/gdCdgmjhRe - earn unban tokens and climb the leaderboard.</text>
+    </message>
+
+    <!-- Server restart countdown (unchanged) -->
+    <message>
+        <deadline>120</deadline>
         <shutdown>1</shutdown>
-        <text>#name will shutdown in #tmin minutes.</text>
+        <text>#name will restart in #tmin minutes.</text>
     </message>
-
-
-2) following message will be displayed every 15 minutes to every player
-
-    <message>
-        <repeat>15</repeat>
-        <text>You're playing on my server (#name). Thank you .)</text>
-    </message>
-
-
-3) following message will be displayed every 50 minutes to every player
-    and 10 minutes after player connect
-
-    <message>
-        <delay>10</delay>
-        <repeat>50</repeat>
-        <onconnect>1</onconnect>
-        <text>Check our web page at www.dayz.com</text>
-    </message>
-
-
-4) following message will be displayed once
-    and 2 minutes after player connect
-
-    <message>
-        <delay>2</delay>
-        <onconnect>1</onconnect>
-        <text>Welcome to my server #name</text>
-    </message>
-    -->
-
 </messages>
