@@ -7,6 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+### Changed
+### Deprecated
+### Removed
+### Fixed
+### Security
+
+## [1.2.0] - 2026-07-10
+
+### Added
 - Custom minimal spawn loadout (`custom/loadout.json`, wired via `spawnGearPresetFiles`): worn t-shirt/canvas pants/athletic shoes plus a bandage and a steak knife.
 - One Life new-player onboarding message rotation and Discord invite in `db/messages.xml`.
 
@@ -17,11 +26,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Infected:** raised zombie zone density (~+37%) in `env/zombie_territories.xml`.
 - **Base building:** free-form placement (placement/collision checks disabled).
 - **Timers:** removed server-hop/relog penalties (`TimeHopping`/`TimePenalty` = 0), shortened login time, idle mode effectively off (`db/globals.xml`).
-
-### Deprecated
-### Removed
-### Fixed
-### Security
 
 ## [1.1.0] - 2026-07-10
 
