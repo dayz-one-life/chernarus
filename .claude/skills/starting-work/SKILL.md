@@ -15,8 +15,8 @@ Prepares an isolated `feature/*` branch on your fork, synced with the canonical 
 
 ## Steps
 
-1. Read `.claude/workflow.json` for `baseBranch` (default `develop`) and `featurePrefix` (default `feature/`).
-2. Ensure an `upstream` remote points at the canonical repo: `git remote get-url upstream` — if missing, `git remote add upstream https://github.com/<canonicalRepo>.git`.
-3. Fetch and sync the base: `git fetch upstream` then create the branch from the fresh base: `git checkout -b <featurePrefix><slug> upstream/<baseBranch>`.
+1. Read `.claude/workflow.json` for `baseBranch` (default `develop`), `featurePrefix` (default `feature/`), and `soloMaintainer`.
+2. If `soloMaintainer` is `true`, `origin` is the canonical repo — skip the `upstream` remote step. Otherwise, ensure an `upstream` remote points at the canonical repo: `git remote get-url upstream` — if missing, `git remote add upstream https://github.com/<canonicalRepo>.git`.
+3. Fetch and sync the base: if `soloMaintainer` is `true`, `git fetch origin` then create the branch from the fresh base: `git checkout -b <featurePrefix><slug> origin/<baseBranch>`. Otherwise, `git fetch upstream` then create the branch from the fresh base: `git checkout -b <featurePrefix><slug> upstream/<baseBranch>`.
 4. Choose `<slug>` as a short kebab-case summary of the work.
 5. Confirm the branch is created and hand off to implementation (use superpowers:test-driven-development for the actual work).

@@ -181,6 +181,8 @@ def evaluate(action, ctx):
                 if ctx.get("pr_reviewed") is not True:
                     return False, "Blocked: post a review first (a COMMENTED review satisfies solo mode)."
                 return True, ""
+            if base is None:
+                return False, "Blocked: could not determine the PR base branch; resolve it and retry."
             return True, ""
         return True, ""
 
@@ -271,7 +273,7 @@ def pr_reviewed(number, cwd=None):
         return None
     if data.get("reviewDecision") == "CHANGES_REQUESTED":
         return False
-    states = {r.get("state") for r in data.get("reviews", [])}
+    states = {r.get("state") for r in (data.get("reviews") or [])}
     return bool(states & {"APPROVED", "COMMENTED"})
 
 

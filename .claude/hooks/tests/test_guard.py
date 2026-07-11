@@ -351,6 +351,15 @@ def test_solo_contribution_merge_ok_when_squash_and_reviewed():
     assert allow is True
 
 
+def test_solo_merge_fails_closed_when_base_unknown():
+    allow, reason = guard.evaluate(
+        {"kind": "gh-pr-merge", "is_squash": True},
+        ctx(role="solo", pr_base=None, pr_head=None, pr_reviewed=True),
+    )
+    assert allow is False
+    assert "base" in reason.lower()
+
+
 import json
 import os
 import subprocess
