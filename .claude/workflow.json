@@ -1,5 +1,5 @@
 {
-  "canonicalRepo": "",
+  "canonicalRepo": "dayz-one-life/chernarus",
   "baseBranch": "develop",
   "productionBranch": "main",
   "protectedBranches": ["develop", "main"],

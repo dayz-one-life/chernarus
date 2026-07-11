@@ -38,6 +38,16 @@ user at the start of a fresh session.**
 - Superpowers/role detection are filesystem/remote heuristics; they fail with clear messages.
 - Approved-review detection needs the canonical repo to be a real GitHub remote.
 
+## Repository layout
+
+This repo holds the DayZ **Chernarus** server mission configuration:
+
+- `cfg*.xml` / `cfg*.json` — server config: economy core, spawnable types, limits, event spawns/groups, weather, gameplay, player spawn points, random presets.
+- `db/` — central economy database: `types.xml`, `events.xml`, `economy.xml`, `globals.xml`, `messages.xml`.
+- `env/` — animal/infected territory definitions per species.
+- `mapgroup*.xml`, `mapclusterproto.xml`, `areaflags.map` — map object group clusters, positions, and prototypes (largely map-editor generated; edit with care).
+- `init.c` — mission init script (Enforce Script).
+
 ## Configuration
 
 `.claude/workflow.json` holds `canonicalRepo`, branch names, and optional `commands.test`/`commands.lint`.
