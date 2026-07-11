@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- GitHub Actions FTP deploy workflow (`.github/workflows/deploy.yml`) that publishes changed config to the server when a release is published (previously deployed on pushes to `develop`). Dev tooling (`.claude`, `.superpowers`, `docs`) is excluded from the upload.
+
 ### Changed
 ### Deprecated
 ### Removed
