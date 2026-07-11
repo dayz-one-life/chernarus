@@ -50,6 +50,10 @@ See `README.md` for a project overview. This repo holds the DayZ **Chernarus** s
 - `custom/` — server-specific overrides referenced from config (e.g. `loadout.json`, the fresh-spawn gear preset used by `spawnGearPresetFiles`).
 - `init.c` — mission init script (Enforce Script).
 
+## Deployment
+
+`.github/workflows/deploy.yml` deploys the config to the server via FTP when a **GitHub release is published** (the last step of `cutting-a-release`). It uploads only changed files and excludes dev tooling (`.claude`, `.superpowers`, `docs`, `*.md`). Requires the `FTP_SERVER`/`FTP_USERNAME`/`FTP_PASSWORD`/`FTP_DIRECTORY` repo secrets.
+
 ## Configuration
 
 `.claude/workflow.json` holds `canonicalRepo`, branch names, and optional `commands.test`/`commands.lint`.
