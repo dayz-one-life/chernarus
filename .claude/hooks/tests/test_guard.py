@@ -259,6 +259,98 @@ def test_unknown_cross_repo_defaults_to_contribution_gate():
     assert allow is False
 
 
+# --- evaluate: solo ---
+
+def test_solo_blocked_commit_on_develop():
+    allow, reason = guard.evaluate({"kind": "git-commit"}, ctx(role="solo", branch="develop"))
+    assert allow is False
+    assert "protected" in reason
+
+
+def test_solo_blocked_commit_on_main():
+    allow, reason = guard.evaluate({"kind": "git-commit"}, ctx(role="solo", branch="main"))
+    assert allow is False
+
+
+def test_solo_allowed_commit_on_feature():
+    allow, _ = guard.evaluate({"kind": "git-commit"}, ctx(role="solo", branch="feature/x"))
+    assert allow is True
+
+
+def test_solo_allowed_commit_on_release():
+    allow, _ = guard.evaluate({"kind": "git-commit"}, ctx(role="solo", branch="release/1.2.0"))
+    assert allow is True
+
+
+def test_solo_pr_create_into_main_allowed():
+    allow, _ = guard.evaluate({"kind": "gh-pr-create", "base": "main"}, ctx(role="solo"))
+    assert allow is True
+
+
+def test_solo_pr_create_into_develop_ok():
+    allow, _ = guard.evaluate({"kind": "gh-pr-create", "base": "develop"}, ctx(role="solo"))
+    assert allow is True
+
+
+def test_solo_pr_create_into_develop_needs_changelog():
+    allow, reason = guard.evaluate({"kind": "gh-pr-create", "base": "develop"}, ctx(role="solo", changelog_changed=False))
+    assert allow is False
+    assert "CHANGELOG" in reason
+
+
+def test_solo_pr_create_into_develop_needs_claudemd():
+    allow, reason = guard.evaluate({"kind": "gh-pr-create", "base": "develop"}, ctx(role="solo", claudemd_changed=False))
+    assert allow is False
+    assert "CLAUDE.md" in reason
+
+
+def test_solo_pr_create_bad_base_blocked():
+    allow, reason = guard.evaluate({"kind": "gh-pr-create", "base": "random"}, ctx(role="solo"))
+    assert allow is False
+
+
+def test_solo_release_pr_merge_into_main_allowed():
+    allow, _ = guard.evaluate(
+        {"kind": "gh-pr-merge", "is_squash": False},
+        ctx(role="solo", pr_base="main", pr_head="release/1.2.0"),
+    )
+    assert allow is True
+
+
+def test_solo_back_merge_main_into_develop_allowed():
+    allow, _ = guard.evaluate(
+        {"kind": "gh-pr-merge", "is_squash": False},
+        ctx(role="solo", pr_base="develop", pr_head="main"),
+    )
+    assert allow is True
+
+
+def test_solo_contribution_merge_needs_squash():
+    allow, reason = guard.evaluate(
+        {"kind": "gh-pr-merge", "is_squash": False},
+        ctx(role="solo", pr_base="develop", pr_head="feature/x", pr_reviewed=True),
+    )
+    assert allow is False
+    assert "squash" in reason.lower()
+
+
+def test_solo_contribution_merge_needs_review():
+    allow, reason = guard.evaluate(
+        {"kind": "gh-pr-merge", "is_squash": True},
+        ctx(role="solo", pr_base="develop", pr_head="feature/x", pr_reviewed=False),
+    )
+    assert allow is False
+    assert "review" in reason.lower()
+
+
+def test_solo_contribution_merge_ok_when_squash_and_reviewed():
+    allow, _ = guard.evaluate(
+        {"kind": "gh-pr-merge", "is_squash": True},
+        ctx(role="solo", pr_base="develop", pr_head="feature/x", pr_reviewed=True),
+    )
+    assert allow is True
+
+
 import json
 import os
 import subprocess

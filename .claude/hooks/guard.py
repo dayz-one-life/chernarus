@@ -151,6 +151,39 @@ def evaluate(action, ctx):
             return True, ""
         return True, ""
 
+    if role == "solo":
+        production_branch = cfg.get("productionBranch", "main")
+        if kind in ("git-commit", "git-push", "git-merge"):
+            if branch in protected:
+                return False, f"Blocked: '{branch}' is protected. Changes reach it via PR."
+            return True, ""
+        if kind == "gh-pr-create":
+            base = action.get("base")
+            if base == production_branch:
+                return True, ""
+            if base == base_branch:
+                if not ctx["changelog_changed"]:
+                    return False, "Blocked: update CHANGELOG.md (Unreleased) before opening a PR."
+                if not ctx["claudemd_changed"]:
+                    return False, "Blocked: updating CLAUDE.md is the last step before a PR. Update it first."
+                return True, ""
+            return False, f"Blocked: PR into '{base_branch}' or '{production_branch}'."
+        if kind == "gh-pr-merge":
+            base = ctx.get("pr_base")
+            head = ctx.get("pr_head")
+            if base == production_branch:
+                return True, ""
+            if base == base_branch and head == production_branch:
+                return True, ""
+            if base == base_branch:
+                if action.get("is_squash") is not True:
+                    return False, "Blocked: merge contributions into develop with --squash."
+                if ctx.get("pr_reviewed") is not True:
+                    return False, "Blocked: post a review first (a COMMENTED review satisfies solo mode)."
+                return True, ""
+            return True, ""
+        return True, ""
+
     return True, ""
 
 
