@@ -9,7 +9,8 @@ Prepares an isolated `feature/*` branch on your fork, synced with the canonical 
 
 ## Preconditions
 
-- You must be on a **fork** (the guard blocks feature commits on the canonical repo). If `git remote get-url origin` matches the canonical repo, stop and instruct the user to fork first with `gh repo fork <canonical> --clone`.
+- **Unless `soloMaintainer` is `true` in `.claude/workflow.json`:** you must be on a **fork** (the guard blocks feature commits on the canonical repo). If `git remote get-url origin` matches the canonical repo, stop and instruct the user to fork first with `gh repo fork <canonical> --clone`.
+- **When `soloMaintainer` is `true`:** no fork is required. Work directly in the canonical clone (`origin` = canonical); the `solo` role permits `feature/*` commits in place. Skip the fork check and the `upstream` setup — `origin` already points at the canonical repo.
 - The Superpowers plugin must be installed (write actions are blocked otherwise).
 
 ## Steps
