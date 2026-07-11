@@ -23,5 +23,10 @@
 	<type name="Ammo_FlareRed"></type>	
 	<type name="Ammo_FlareGreen"></type>	
 	<type name="Ammo_FlareBlue"></type>	
-	<type name="Ammo_Flare"></type>	
+	<type name="Ammo_Flare"></type>
+	<type name="PunchedCard"></type>
+	<type name="ShippingContainerKeys_Red"></type>
+	<type name="ShippingContainerKeys_Orange"></type>
+	<type name="ShippingContainerKeys_Yellow"></type>
+	<type name="ShippingContainerKeys_Blue"></type>
 </ignore>
