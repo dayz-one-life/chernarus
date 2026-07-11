@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- `cfgIgnoreList.xml`: ignore `PunchedCard` and the colored shipping-container keys (`ShippingContainerKeys_Red`, `_Orange`, `_Yellow`, `_Blue`) so the economy no longer tracks/reports them.
+
 ### Changed
 ### Deprecated
 ### Removed

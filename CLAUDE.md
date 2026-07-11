@@ -44,6 +44,7 @@ user at the start of a fresh session.**
 See `README.md` for a project overview. This repo holds the DayZ **Chernarus** server mission configuration:
 
 - `cfg*.xml` / `cfg*.json` — server config: economy core, spawnable types, limits, event spawns/groups, weather, gameplay, player spawn points, random presets.
+- `cfgIgnoreList.xml` — item types the central economy ignores (never tracked, spawned, or cleaned up).
 - `db/` — central economy database: `types.xml`, `events.xml`, `economy.xml`, `globals.xml`, `messages.xml`.
 - `env/` — animal/infected territory definitions per species.
 - `mapgroup*.xml`, `mapclusterproto.xml`, `areaflags.map` — map object group clusters, positions, and prototypes (largely map-editor generated; edit with care).
