@@ -5,11 +5,14 @@
 		"disableBaseDamage": false,
 		"disableContainerDamage": false,
 		"disableRespawnDialog": false,
-		"disableRespawnInUnconsciousness": false
+		"disableRespawnInUnconsciousness": true
 	},
     "PlayerData":
 	{
-		"disablePersonalLight": false,
+		"spawnGearPresetFiles": [
+			"./custom/loadout.json"
+		],
+		"disablePersonalLight": true,
 		"StaminaData":
 		{
 			"sprintStaminaModifierErc": 1.0,
@@ -55,32 +58,32 @@
 	{
 		"lightingConfig": 0,
 		"objectSpawnersArr": [],
-		"environmentMinTemps": [-3, -2, 0, 4, 9, 14, 18, 17, 13, 11, 9, 0],
-		"environmentMaxTemps": [3, 5, 7, 14, 19, 24, 26, 25, 18, 14, 10, 5],
+		"environmentMinTemps": [-6, -6, -6, -6, -6, -6, -6, -6, -6, -6, -6, -6],
+		"environmentMaxTemps": [-2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2],
 		"wetnessWeightModifiers": [1.0, 1.0, 1.33, 1.66, 2.0]
 	},
 	"BaseBuildingData":
 	{
 		"HologramData":
 		{
-			"disableIsCollidingBBoxCheck": false,
-			"disableIsCollidingPlayerCheck": false,
-			"disableIsClippingRoofCheck": false,
-			"disableIsBaseViableCheck": false,
-			"disableIsCollidingGPlotCheck": false,
-			"disableIsCollidingAngleCheck": false,
-			"disableIsPlacementPermittedCheck": false,
-			"disableHeightPlacementCheck": false,
-			"disableIsUnderwaterCheck": false,
-			"disableIsInTerrainCheck": false,
-			"disableColdAreaBuildingCheck": false,
+			"disableIsCollidingBBoxCheck": true,
+			"disableIsCollidingPlayerCheck": true,
+			"disableIsClippingRoofCheck": true,
+			"disableIsBaseViableCheck": true,
+			"disableIsCollidingGPlotCheck": true,
+			"disableIsCollidingAngleCheck": true,
+			"disableIsPlacementPermittedCheck": true,
+			"disableHeightPlacementCheck": true,
+			"disableIsUnderwaterCheck": true,
+			"disableIsInTerrainCheck": true,
+			"disableColdAreaBuildingCheck": true,
 			"disallowedTypesInUnderground": ["FenceKit","TerritoryFlagKit","WatchtowerKit"]
 		},
 		"ConstructionData":
 		{
-			"disablePerformRoofCheck": false,
-			"disableIsCollidingCheck": false,
-			"disableDistanceCheck": false
+			"disablePerformRoofCheck": true,
+			"disableIsCollidingCheck": true,
+			"disableDistanceCheck": true
 		}
 	},
 	"UIData":
