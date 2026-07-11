@@ -35,9 +35,11 @@ def load_config(root):
         return {}
 
 
-def detect_role(origin_slug_value, canonical):
+def detect_role(origin_slug_value, canonical, solo=False):
     if not canonical:
         return "uninitialized"
+    if solo:
+        return "solo"
     if origin_slug_value == canonical:
         return "maintainer"
     return "contributor"
