@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- Base Chernarus server configuration imported under version control: economy core, spawnable types, event spawns/groups, weather, environment territories, player spawn points, map group clusters/positions, and `init.c`.
+- Workflow initialization: stamped `canonicalRepo` (`dayz-one-life/chernarus`) in `.claude/workflow.json` so the workflow guards activate on `develop`.
+
 ### Changed
 ### Deprecated
 ### Removed
