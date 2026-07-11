@@ -40,7 +40,7 @@ user at the start of a fresh session.**
 
 ## Repository layout
 
-This repo holds the DayZ **Chernarus** server mission configuration:
+See `README.md` for a project overview. This repo holds the DayZ **Chernarus** server mission configuration:
 
 - `cfg*.xml` / `cfg*.json` — server config: economy core, spawnable types, limits, event spawns/groups, weather, gameplay, player spawn points, random presets.
 - `db/` — central economy database: `types.xml`, `events.xml`, `economy.xml`, `globals.xml`, `messages.xml`.

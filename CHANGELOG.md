@@ -8,6 +8,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 ### Changed
+- Rewrote `README.md` to describe the Xbox One Life Chernarus server configuration and repository layout (replacing the inherited workflow-template README).
+
 ### Deprecated
 ### Removed
 ### Fixed
