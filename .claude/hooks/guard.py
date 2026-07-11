@@ -151,6 +151,41 @@ def evaluate(action, ctx):
             return True, ""
         return True, ""
 
+    if role == "solo":
+        production_branch = cfg.get("productionBranch", "main")
+        if kind in ("git-commit", "git-push", "git-merge"):
+            if branch in protected:
+                return False, f"Blocked: '{branch}' is protected. Changes reach it via PR."
+            return True, ""
+        if kind == "gh-pr-create":
+            base = action.get("base")
+            if base == production_branch:
+                return True, ""
+            if base == base_branch:
+                if not ctx["changelog_changed"]:
+                    return False, "Blocked: update CHANGELOG.md (Unreleased) before opening a PR."
+                if not ctx["claudemd_changed"]:
+                    return False, "Blocked: updating CLAUDE.md is the last step before a PR. Update it first."
+                return True, ""
+            return False, f"Blocked: PR into '{base_branch}' or '{production_branch}'."
+        if kind == "gh-pr-merge":
+            base = ctx.get("pr_base")
+            head = ctx.get("pr_head")
+            if base == production_branch:
+                return True, ""
+            if base == base_branch and head == production_branch:
+                return True, ""
+            if base == base_branch:
+                if action.get("is_squash") is not True:
+                    return False, "Blocked: merge contributions into develop with --squash."
+                if ctx.get("pr_reviewed") is not True:
+                    return False, "Blocked: post a review first (a COMMENTED review satisfies solo mode)."
+                return True, ""
+            if base is None:
+                return False, "Blocked: could not determine the PR base branch; resolve it and retry."
+            return True, ""
+        return True, ""
+
     return True, ""
 
 
@@ -198,13 +233,57 @@ def pr_cross_repository(number, cwd=None):
     return None
 
 
+def _pr_field(number, field, cwd=None):
+    args = ["pr", "view"]
+    if number:
+        args.append(str(number))
+    args += ["--json", field, "-q", f".{field}"]
+    try:
+        out = subprocess.run(["gh", *args], cwd=cwd, capture_output=True, text=True)
+    except OSError:
+        return None
+    if out.returncode != 0:
+        return None
+    val = out.stdout.strip()
+    return val or None
+
+
+def pr_base(number, cwd=None):
+    return _pr_field(number, "baseRefName", cwd=cwd)
+
+
+def pr_head(number, cwd=None):
+    return _pr_field(number, "headRefName", cwd=cwd)
+
+
+def pr_reviewed(number, cwd=None):
+    args = ["pr", "view"]
+    if number:
+        args.append(str(number))
+    args += ["--json", "reviews,reviewDecision"]
+    try:
+        out = subprocess.run(["gh", *args], cwd=cwd, capture_output=True, text=True)
+    except OSError:
+        return None
+    if out.returncode != 0:
+        return None
+    try:
+        data = json.loads(out.stdout)
+    except ValueError:
+        return None
+    if data.get("reviewDecision") == "CHANGES_REQUESTED":
+        return False
+    states = {r.get("state") for r in (data.get("reviews") or [])}
+    return bool(states & {"APPROVED", "COMMENTED"})
+
+
 def gather_context(cwd=None):
     root = wl.repo_root(cwd=cwd)
     if root is None:
         return None
     config = wl.load_config(root)
     canonical = config.get("canonicalRepo") or ""
-    role = wl.detect_role(wl.origin_slug(cwd=cwd), canonical)
+    role = wl.detect_role(wl.origin_slug(cwd=cwd), canonical, solo=bool(config.get("soloMaintainer")))
     branch = wl.current_branch(cwd=cwd) or ""
     changed = wl.changed_files(config.get("baseBranch", "develop"), cwd=cwd)
     changelog_changed = ("CHANGELOG.md" in changed) if changed is not None else True
@@ -219,6 +298,9 @@ def gather_context(cwd=None):
         "pr_approved": None,
         "staged_files": wl.staged_files(),
         "pr_cross_repository": None,
+        "pr_base": None,
+        "pr_head": None,
+        "pr_reviewed": None,
     }
 
 
@@ -239,7 +321,14 @@ def main():
     for action in actions:
         if action["kind"] == "gh-pr-merge":
             num = action.get("pr_number")
-            ctx = dict(ctx, pr_approved=pr_approved(num), pr_cross_repository=pr_cross_repository(num))
+            ctx = dict(
+                ctx,
+                pr_approved=pr_approved(num),
+                pr_cross_repository=pr_cross_repository(num),
+                pr_base=pr_base(num),
+                pr_head=pr_head(num),
+                pr_reviewed=pr_reviewed(num),
+            )
         allow, reason = evaluate(action, ctx)
         if not allow:
             print(reason, file=sys.stderr)

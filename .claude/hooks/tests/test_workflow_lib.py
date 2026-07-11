@@ -84,3 +84,19 @@ def test_staged_files_lists_staged(tmp_path):
     (tmp_path / "a.txt").write_text("x\n")
     subprocess.run(["git", "-C", str(tmp_path), "add", "a.txt"], check=True)
     assert wl.staged_files(cwd=str(tmp_path)) == ["a.txt"]
+
+
+def test_detect_role_solo_when_flag_set():
+    assert wl.detect_role("alice/app", "dbd-net/app", solo=True) == "solo"
+
+
+def test_detect_role_solo_overrides_maintainer_match():
+    assert wl.detect_role("dbd-net/app", "dbd-net/app", solo=True) == "solo"
+
+
+def test_detect_role_solo_still_uninitialized_without_canonical():
+    assert wl.detect_role("dbd-net/app", "", solo=True) == "uninitialized"
+
+
+def test_detect_role_defaults_solo_false():
+    assert wl.detect_role("dbd-net/app", "dbd-net/app") == "maintainer"

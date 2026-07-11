@@ -259,6 +259,107 @@ def test_unknown_cross_repo_defaults_to_contribution_gate():
     assert allow is False
 
 
+# --- evaluate: solo ---
+
+def test_solo_blocked_commit_on_develop():
+    allow, reason = guard.evaluate({"kind": "git-commit"}, ctx(role="solo", branch="develop"))
+    assert allow is False
+    assert "protected" in reason
+
+
+def test_solo_blocked_commit_on_main():
+    allow, reason = guard.evaluate({"kind": "git-commit"}, ctx(role="solo", branch="main"))
+    assert allow is False
+
+
+def test_solo_allowed_commit_on_feature():
+    allow, _ = guard.evaluate({"kind": "git-commit"}, ctx(role="solo", branch="feature/x"))
+    assert allow is True
+
+
+def test_solo_allowed_commit_on_release():
+    allow, _ = guard.evaluate({"kind": "git-commit"}, ctx(role="solo", branch="release/1.2.0"))
+    assert allow is True
+
+
+def test_solo_pr_create_into_main_allowed():
+    allow, _ = guard.evaluate({"kind": "gh-pr-create", "base": "main"}, ctx(role="solo"))
+    assert allow is True
+
+
+def test_solo_pr_create_into_develop_ok():
+    allow, _ = guard.evaluate({"kind": "gh-pr-create", "base": "develop"}, ctx(role="solo"))
+    assert allow is True
+
+
+def test_solo_pr_create_into_develop_needs_changelog():
+    allow, reason = guard.evaluate({"kind": "gh-pr-create", "base": "develop"}, ctx(role="solo", changelog_changed=False))
+    assert allow is False
+    assert "CHANGELOG" in reason
+
+
+def test_solo_pr_create_into_develop_needs_claudemd():
+    allow, reason = guard.evaluate({"kind": "gh-pr-create", "base": "develop"}, ctx(role="solo", claudemd_changed=False))
+    assert allow is False
+    assert "CLAUDE.md" in reason
+
+
+def test_solo_pr_create_bad_base_blocked():
+    allow, reason = guard.evaluate({"kind": "gh-pr-create", "base": "random"}, ctx(role="solo"))
+    assert allow is False
+
+
+def test_solo_release_pr_merge_into_main_allowed():
+    allow, _ = guard.evaluate(
+        {"kind": "gh-pr-merge", "is_squash": False},
+        ctx(role="solo", pr_base="main", pr_head="release/1.2.0"),
+    )
+    assert allow is True
+
+
+def test_solo_back_merge_main_into_develop_allowed():
+    allow, _ = guard.evaluate(
+        {"kind": "gh-pr-merge", "is_squash": False},
+        ctx(role="solo", pr_base="develop", pr_head="main"),
+    )
+    assert allow is True
+
+
+def test_solo_contribution_merge_needs_squash():
+    allow, reason = guard.evaluate(
+        {"kind": "gh-pr-merge", "is_squash": False},
+        ctx(role="solo", pr_base="develop", pr_head="feature/x", pr_reviewed=True),
+    )
+    assert allow is False
+    assert "squash" in reason.lower()
+
+
+def test_solo_contribution_merge_needs_review():
+    allow, reason = guard.evaluate(
+        {"kind": "gh-pr-merge", "is_squash": True},
+        ctx(role="solo", pr_base="develop", pr_head="feature/x", pr_reviewed=False),
+    )
+    assert allow is False
+    assert "review" in reason.lower()
+
+
+def test_solo_contribution_merge_ok_when_squash_and_reviewed():
+    allow, _ = guard.evaluate(
+        {"kind": "gh-pr-merge", "is_squash": True},
+        ctx(role="solo", pr_base="develop", pr_head="feature/x", pr_reviewed=True),
+    )
+    assert allow is True
+
+
+def test_solo_merge_fails_closed_when_base_unknown():
+    allow, reason = guard.evaluate(
+        {"kind": "gh-pr-merge", "is_squash": True},
+        ctx(role="solo", pr_base=None, pr_head=None, pr_reviewed=True),
+    )
+    assert allow is False
+    assert "base" in reason.lower()
+
+
 import json
 import os
 import subprocess
@@ -339,5 +440,38 @@ def test_main_fail_open_outside_git_repo(tmp_path):
         ["python3", str(HOOKS / "guard.py")],
         input=json.dumps({"tool_name": "Bash", "tool_input": {"command": "git commit -m x"}}),
         capture_output=True, text=True, cwd=str(tmp_path),
+    )
+    assert r.returncode == 0
+
+
+def _init_solo_repo(path):
+    subprocess.run(["git", "init", "-q", str(path)], check=True)
+    subprocess.run(["git", "-C", str(path), "config", "user.email", "t@t.dev"], check=True)
+    subprocess.run(["git", "-C", str(path), "config", "user.name", "T"], check=True)
+    subprocess.run(["git", "-C", str(path), "remote", "add", "origin", "git@github.com:dbd-net/app.git"], check=True)
+    claude = path / ".claude"
+    claude.mkdir()
+    (claude / "workflow.json").write_text(json.dumps({
+        "canonicalRepo": "dbd-net/app", "baseBranch": "develop", "productionBranch": "main",
+        "protectedBranches": ["develop", "main"], "featurePrefix": "feature/", "releasePrefix": "release/",
+        "soloMaintainer": True,
+    }))
+    (path / "CHANGELOG.md").write_text("x\n")
+    subprocess.run(["git", "-C", str(path), "add", "-A"], check=True)
+    subprocess.run(["git", "-C", str(path), "commit", "-qm", "init"], check=True)
+    subprocess.run(["git", "-C", str(path), "branch", "-M", "main"], check=True)
+    subprocess.run(["git", "-C", str(path), "checkout", "-q", "-b", "feature/x"], check=True)
+    sp = path / ".claude" / "plugins" / "mkt" / "superpowers" / "skills" / "s"
+    sp.mkdir(parents=True)
+    (sp / "SKILL.md").write_text("x")
+
+
+def test_solo_flag_allows_feature_commit_from_canonical_clone(tmp_path):
+    _init_solo_repo(tmp_path)
+    env = dict(os.environ, HOME=str(tmp_path))
+    r = subprocess.run(
+        ["python3", str(HOOKS / "guard.py")],
+        input=json.dumps({"tool_name": "Bash", "tool_input": {"command": "git commit -m x"}}),
+        capture_output=True, text=True, cwd=str(tmp_path), env=env,
     )
     assert r.returncode == 0

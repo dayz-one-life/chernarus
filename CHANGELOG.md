@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- `soloMaintainer` mode: an opt-in config flag that enables a `solo` guard role, letting one person run the full workflow (feature work, contribution merge, release, back-merge) from a single clone without swapping git remotes, while preserving protected-branch and squash+review protections.
+
 ### Changed
 ### Deprecated
 ### Removed
