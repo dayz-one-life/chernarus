@@ -47,6 +47,7 @@ See `README.md` for a project overview. This repo holds the DayZ **Chernarus** s
 - `db/` — central economy database: `types.xml`, `events.xml`, `economy.xml`, `globals.xml`, `messages.xml`.
 - `env/` — animal/infected territory definitions per species.
 - `mapgroup*.xml`, `mapclusterproto.xml`, `areaflags.map` — map object group clusters, positions, and prototypes (largely map-editor generated; edit with care).
+- `custom/` — server-specific overrides referenced from config (e.g. `loadout.json`, the fresh-spawn gear preset used by `spawnGearPresetFiles`).
 - `init.c` — mission init script (Enforce Script).
 
 ## Configuration
