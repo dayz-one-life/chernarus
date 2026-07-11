@@ -309,6 +309,31 @@ def test_solo_pr_create_bad_base_blocked():
     assert allow is False
 
 
+def test_solo_backmerge_pr_create_allowed_without_changelog():
+    # main -> develop back-merge must NOT require CHANGELOG/CLAUDE changes
+    allow, _ = guard.evaluate(
+        {"kind": "gh-pr-create", "base": "develop", "head": "main"},
+        ctx(role="solo", changelog_changed=False, claudemd_changed=False),
+    )
+    assert allow is True
+
+
+def test_solo_contribution_pr_create_still_gated():
+    # feature -> develop still requires the changelog/claudemd gate
+    allow, reason = guard.evaluate(
+        {"kind": "gh-pr-create", "base": "develop", "head": "feature/x"},
+        ctx(role="solo", changelog_changed=False),
+    )
+    assert allow is False
+    assert "CHANGELOG" in reason
+
+
+def test_classify_pr_create_captures_head():
+    a = guard.classify("gh pr create --base develop --head main")[0]
+    assert a["base"] == "develop"
+    assert a.get("head") == "main"
+
+
 def test_solo_release_pr_merge_into_main_allowed():
     allow, _ = guard.evaluate(
         {"kind": "gh-pr-merge", "is_squash": False},
