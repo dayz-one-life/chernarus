@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 ### Changed
+- `cfggameplay.json`: raise `environmentMaxTemps` from `-2` to `0` across all twelve months (min stays `-6`, so the ambient range is now `-6`–`0`).
 ### Deprecated
 ### Removed
 ### Fixed

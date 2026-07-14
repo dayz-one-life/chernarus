@@ -59,7 +59,7 @@
 		"lightingConfig": 0,
 		"objectSpawnersArr": [],
 		"environmentMinTemps": [-6, -6, -6, -6, -6, -6, -6, -6, -6, -6, -6, -6],
-		"environmentMaxTemps": [-2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2],
+		"environmentMaxTemps": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
 		"wetnessWeightModifiers": [1.0, 1.0, 1.33, 1.66, 2.0]
 	},
 	"BaseBuildingData":
