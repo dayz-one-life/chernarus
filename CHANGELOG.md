@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 ### Changed
+- `.claude/workflow.json`: enable solo maintainer mode (`soloMaintainer: true`) so contributor + maintainer permissions are available from the single canonical clone.
 ### Deprecated
 ### Removed
 ### Fixed

@@ -57,4 +57,4 @@ See `README.md` for a project overview. This repo holds the DayZ **Chernarus** s
 
 ## Configuration
 
-`.claude/workflow.json` holds `canonicalRepo`, branch names, and optional `commands.test`/`commands.lint`.
+`.claude/workflow.json` holds `canonicalRepo`, branch names, the `soloMaintainer` flag (currently `true`), and optional `commands.test`/`commands.lint`.
