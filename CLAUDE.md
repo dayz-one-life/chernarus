@@ -50,6 +50,7 @@ See `README.md` for a project overview. This repo holds the DayZ **Chernarus** s
 - `mapgroup*.xml`, `mapclusterproto.xml`, `areaflags.map` — map object group clusters, positions, and prototypes (largely map-editor generated; edit with care).
 - `custom/` — server-specific overrides referenced from config (e.g. `loadout.json`, the fresh-spawn gear preset used by `spawnGearPresetFiles`).
 - `init.c` — mission init script (Enforce Script).
+- `docs/tools/` — reusable maintenance scripts, kept out of the FTP deploy. `road-to-badlands/nerf_loot.py` and `buff_zeds.py` re-derive the loot nerf (halve `nominal`/`min`, round up, excluding `deloot="1"` and `ContaminatedArea` types) and the zed buff (+1 to each zone's `dmin`/`dmax`, skipping `dmax=0`) on top of a fresh upstream mission drop. Both preserve the source file's line endings (`newline=""` — `env/zombie_territories.xml` is CRLF) and abort loudly if the element count changes.
 
 ## Deployment
 
