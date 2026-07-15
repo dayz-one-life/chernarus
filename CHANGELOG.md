@@ -7,6 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+### Changed
+### Deprecated
+### Removed
+### Fixed
+### Security
+
+## [2.0.0] - 2026-07-15
+
+### Added
 - `docs/tools/road-to-badlands/`: reusable transform scripts (`nerf_loot.py`, `buff_zeds.py`) that re-derive our loot nerf and zed buff on top of upstream files (excluded from server deploy).
 
 ### Changed
