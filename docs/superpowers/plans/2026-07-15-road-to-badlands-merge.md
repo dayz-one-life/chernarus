@@ -243,12 +243,18 @@ def transform(text: str) -> str:
 
 if __name__ == "__main__":
     path = sys.argv[1]
-    with open(path, encoding="utf-8") as f:
+    # newline="" disables newline translation on read AND write, so the file's
+    # original line endings (this file is CRLF) are preserved byte-for-byte.
+    with open(path, encoding="utf-8", newline="") as f:
         original = f.read()
-    with open(path, "w", encoding="utf-8") as f:
+    with open(path, "w", encoding="utf-8", newline="") as f:
         f.write(transform(original))
     print(f"buff applied to {path}")
 ```
+
+**Line endings:** `env/zombie_territories.xml` uses CRLF. The `newline=""` argument
+on both `open` calls is mandatory — without it Python's text mode rewrites every
+`\r\n` to `\n`, changing all 807 lines and violating "all other bytes identical."
 
 - [ ] **Step 2: Prove the core logic on inline fixtures**
 
@@ -285,12 +291,15 @@ Expected: `buff applied to env/zombie_territories.xml`
 
 ```bash
 xmllint --noout env/zombie_territories.xml && echo "WELLFORMED"
+# CRLF must be preserved (this file is CRLF); still present after transform:
+grep -lq $'\r' env/zombie_territories.xml && echo "CRLF PRESERVED" || echo "CRLF LOST!"
 # first zone was dmin=8 dmax=12 -> expect 9/13
 grep -m1 'dmin=' env/zombie_territories.xml
-# every changed line is a zone dmin/dmax line, count == N from Step 3
-git diff HEAD -- env/zombie_territories.xml | grep -c '^+.*dmin='
+# numstat must be EXACTLY N added / N deleted (only the buffed zone lines);
+# if line endings flipped, this shows ~807/807 instead of N/N.
+git diff --numstat HEAD -- env/zombie_territories.xml
 ```
-Expected: `WELLFORMED`; first zone shows `dmin="9" dmax="13"`; changed-line count equals `N`.
+Expected: `WELLFORMED`; `CRLF PRESERVED`; first zone shows `dmin="9" dmax="13"`; numstat shows exactly `N	N	env/zombie_territories.xml` (added == deleted == N from Step 3).
 
 - [ ] **Step 6: Commit**
 
