@@ -45,7 +45,7 @@ See `README.md` for a project overview. This repo holds the DayZ **Chernarus** s
 
 - `cfg*.xml` / `cfg*.json` — server config: economy core, spawnable types, limits, event spawns/groups, weather, gameplay, player spawn points, random presets. `cfggameplay.json` includes the ambient environment temperature range (`environmentMinTemps`/`environmentMaxTemps`, twelve monthly values each).
 - `cfgIgnoreList.xml` — item types the central economy ignores (never tracked, spawned, or cleaned up).
-- `db/` — central economy database: `types.xml`, `events.xml`, `economy.xml`, `globals.xml`, `messages.xml`.
+- `db/` — central economy database: `types.xml`, `events.xml`, `economy.xml`, `globals.xml`, `messages.xml`. `messages.xml` holds only new-player onboarding broadcasts; reboot/restart notifications are handled by the Discord bot, not the in-game mission.
 - `env/` — animal/infected territory definitions per species.
 - `mapgroup*.xml`, `mapclusterproto.xml`, `areaflags.map` — map object group clusters, positions, and prototypes (largely map-editor generated; edit with care).
 - `custom/` — server-specific overrides referenced from config (e.g. `loadout.json`, the fresh-spawn gear preset used by `spawnGearPresetFiles`).
@@ -57,4 +57,4 @@ See `README.md` for a project overview. This repo holds the DayZ **Chernarus** s
 
 ## Configuration
 
-`.claude/workflow.json` holds `canonicalRepo`, branch names, and optional `commands.test`/`commands.lint`.
+`.claude/workflow.json` holds `canonicalRepo`, branch names, the `soloMaintainer` flag (currently `true`), and optional `commands.test`/`commands.lint`.

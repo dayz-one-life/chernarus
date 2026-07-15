@@ -6,7 +6,7 @@
   "featurePrefix": "feature/",
   "releasePrefix": "release/",
   "versionScheme": "semver",
-  "soloMaintainer": false,
+  "soloMaintainer": true,
   "commands": {
     "test": "",
     "lint": ""
