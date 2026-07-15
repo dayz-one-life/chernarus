@@ -3,6 +3,8 @@
 import re
 import sys
 
+ZONE_DENSITY = re.compile(r'dmin="(\d+)" dmax="(\d+)"')
+
 def buff(m: re.Match) -> str:
     dmin, dmax = int(m.group(1)), int(m.group(2))
     if dmax == 0:
@@ -10,7 +12,7 @@ def buff(m: re.Match) -> str:
     return f'dmin="{dmin + 1}" dmax="{dmax + 1}"'
 
 def transform(text: str) -> str:
-    return re.sub(r'dmin="(\d+)" dmax="(\d+)"', buff, text)
+    return ZONE_DENSITY.sub(buff, text)
 
 if __name__ == "__main__":
     if len(sys.argv) != 2:
@@ -22,7 +24,7 @@ if __name__ == "__main__":
         original = f.read()
 
     expected = original.count('<zone ')
-    new_text, n = re.subn(r'dmin="(\d+)" dmax="(\d+)"', buff, original)
+    new_text, n = ZONE_DENSITY.subn(buff, original)
     if n != expected:
         sys.exit(
             f"ABORT: matched {n} dmin/dmax pairs but found {expected} '<zone ' "

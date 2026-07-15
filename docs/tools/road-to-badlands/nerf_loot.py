@@ -4,6 +4,8 @@ types flagged deloot="1" or carrying a <usage name="ContaminatedArea"/>."""
 import re
 import sys
 
+TYPE_BLOCK = re.compile(r'<type name=.*?</type>', re.DOTALL)
+
 def ceil_half(n: int) -> int:
     return -(-n // 2)  # integer ceil: 1->1, 2->1, 3->2, 0->0
 
@@ -18,7 +20,7 @@ def nerf_block(m: re.Match) -> str:
     return block
 
 def transform(text: str) -> str:
-    return re.sub(r'<type name=.*?</type>', nerf_block, text, flags=re.DOTALL)
+    return TYPE_BLOCK.sub(nerf_block, text)
 
 if __name__ == "__main__":
     if len(sys.argv) != 2:
@@ -28,7 +30,7 @@ if __name__ == "__main__":
         original = f.read()
 
     expected = original.count('<type name=')
-    new_text, n = re.subn(r'<type name=.*?</type>', nerf_block, original, flags=re.DOTALL)
+    new_text, n = TYPE_BLOCK.subn(nerf_block, original)
     if n != expected:
         sys.exit(
             f"ABORT: matched {n} <type> blocks but found {expected} '<type name=' "
