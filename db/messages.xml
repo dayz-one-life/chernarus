@@ -19,11 +19,4 @@
         <repeat>5</repeat>
         <text>Join the pack: discord.gg/gdCdgmjhRe - earn unban tokens and climb the leaderboard.</text>
     </message>
-
-    <!-- Server restart countdown (unchanged) -->
-    <message>
-        <deadline>120</deadline>
-        <shutdown>1</shutdown>
-        <text>#name will restart in #tmin minutes.</text>
-    </message>
 </messages>
