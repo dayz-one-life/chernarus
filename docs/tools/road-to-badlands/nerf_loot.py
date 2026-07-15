@@ -9,7 +9,7 @@ def ceil_half(n: int) -> int:
 
 def nerf_block(m: re.Match) -> str:
     block = m.group(0)
-    if 'deloot="1"' in block or 'name="ContaminatedArea"' in block:
+    if 'deloot="1"' in block or '<usage name="ContaminatedArea"' in block:
         return block
     block = re.sub(r'(<nominal>)(\d+)(</nominal>)',
                    lambda x: f'{x.group(1)}{ceil_half(int(x.group(2)))}{x.group(3)}', block)
@@ -21,9 +21,20 @@ def transform(text: str) -> str:
     return re.sub(r'<type name=.*?</type>', nerf_block, text, flags=re.DOTALL)
 
 if __name__ == "__main__":
+    if len(sys.argv) != 2:
+        sys.exit(f"usage: {sys.argv[0]} <xml-file>")
     path = sys.argv[1]
-    with open(path, encoding="utf-8") as f:
+    with open(path, encoding="utf-8", newline="") as f:
         original = f.read()
-    with open(path, "w", encoding="utf-8") as f:
-        f.write(transform(original))
-    print(f"nerf applied to {path}")
+
+    expected = original.count('<type name=')
+    new_text, n = re.subn(r'<type name=.*?</type>', nerf_block, original, flags=re.DOTALL)
+    if n != expected:
+        sys.exit(
+            f"ABORT: matched {n} <type> blocks but found {expected} '<type name=' "
+            f"occurrences in {path}; refusing to write (possible format change)"
+        )
+
+    with open(path, "w", encoding="utf-8", newline="") as f:
+        f.write(new_text)
+    print(f"nerf applied to {path} ({n} type blocks)")

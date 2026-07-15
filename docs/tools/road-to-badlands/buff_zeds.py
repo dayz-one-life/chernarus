@@ -13,11 +13,22 @@ def transform(text: str) -> str:
     return re.sub(r'dmin="(\d+)" dmax="(\d+)"', buff, text)
 
 if __name__ == "__main__":
+    if len(sys.argv) != 2:
+        sys.exit(f"usage: {sys.argv[0]} <xml-file>")
     path = sys.argv[1]
     # newline="" disables newline translation on read AND write, so the file's
     # original line endings (this file is CRLF) are preserved byte-for-byte.
     with open(path, encoding="utf-8", newline="") as f:
         original = f.read()
+
+    expected = original.count('<zone ')
+    new_text, n = re.subn(r'dmin="(\d+)" dmax="(\d+)"', buff, original)
+    if n != expected:
+        sys.exit(
+            f"ABORT: matched {n} dmin/dmax pairs but found {expected} '<zone ' "
+            f"occurrences in {path}; refusing to write (possible format change)"
+        )
+
     with open(path, "w", encoding="utf-8", newline="") as f:
-        f.write(transform(original))
-    print(f"buff applied to {path}")
+        f.write(new_text)
+    print(f"buff applied to {path} ({n} zones)")
