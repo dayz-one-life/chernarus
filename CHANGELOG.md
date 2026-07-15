@@ -13,6 +13,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 ### Security
 
+## [2.0.0] - 2026-07-15
+
+### Added
+- `docs/tools/road-to-badlands/`: reusable transform scripts (`nerf_loot.py`, `buff_zeds.py`) that re-derive our loot nerf and zed buff on top of upstream files (excluded from server deploy).
+
+### Changed
+- Adopted Bohemia's **Road to Badlands** mission config as the new base for all upstream-owned files (`cfgspawnabletypes.xml`, `cfgeventgroups.xml`, `cfgrandompresets.xml`, `mapgrouppos.xml`, `mapgroupproto.xml`, `db/events.xml`, `db/types.xml`, `env/fox_territories.xml`, `env/zombie_territories.xml`).
+- **Loot nerf** re-derived as a deterministic rule: halve `nominal`/`min` (round up, so `1` stays `1`) on every `db/types.xml` type except `deloot="1"` and `ContaminatedArea` items. Now also covers new Road to Badlands loot.
+- **Zed buff** reduced from +2 to **+1** on `env/zombie_territories.xml` zone `dmin`/`dmax` (zones with `dmax=0` skipped).
+
+### Removed
+- `cfgIgnoreList.xml` custom additions (flares, `PunchedCard`, colored `ShippingContainerKeys`) — reverted to vanilla; the old keys/cards they suppressed have since despawned.
+
 ## [1.5.0] - 2026-07-14
 
 ### Changed
