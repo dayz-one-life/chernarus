@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `.claude/workflow.json`: enable solo maintainer mode (`soloMaintainer: true`) so contributor + maintainer permissions are available from the single canonical clone.
 ### Deprecated
 ### Removed
+- `db/messages.xml`: remove the in-game server-restart countdown message (`shutdown`/`deadline` block). Reboot notifications are now handled by the Discord bot.
 ### Fixed
 ### Security
 
