@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 ### Changed
+- `db/globals.xml`: raise `LootDamageMin` from `0.0` to `0.2` so spawned loot is always at least 20% damaged (max quality capped at 80%; `LootDamageMax` stays `0.82`).
 ### Deprecated
 ### Removed
 ### Fixed
