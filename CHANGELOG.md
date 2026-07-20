@@ -13,6 +13,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 ### Security
 
+## [2.0.2] - 2026-07-20
+
+### Changed
+- `db/messages.xml`: the "Join the pack" onboarding broadcast now points players at `dayzonelife.com` instead of the Discord invite — the website is where unban tokens are earned and spent.
+
 ## [2.0.1] - 2026-07-15
 
 ### Changed
