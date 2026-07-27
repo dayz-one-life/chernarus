@@ -8,8 +8,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 ### Changed
+- `env/zombie_territories.xml`: revert the zed buff — restore vanilla zone `dmin`/`dmax` (file is now byte-identical to Bohemia's upstream), removing the +1 density applied since 1.2.0.
+- `cfggameplay.json`: revert the climate tweak — restore vanilla seasonal `environmentMinTemps`/`environmentMaxTemps` (−3…26°C across the year), replacing the flat 0…3°C range.
 ### Deprecated
 ### Removed
+- `docs/tools/road-to-badlands/buff_zeds.py`: retired — the zed buff it re-derived no longer exists, and keeping it risked silently re-applying the buff on the next upstream merge.
 ### Fixed
 ### Security
 
