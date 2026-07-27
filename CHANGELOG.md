@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 ### Deprecated
 ### Removed
+- Custom minimal fresh-spawn loadout: deleted `custom/loadout.json` and emptied `spawnGearPresetFiles` in `cfggameplay.json` — players spawn with vanilla default gear again.
 ### Fixed
 ### Security
 
