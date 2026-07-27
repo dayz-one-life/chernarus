@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 ### Changed
+- `cfggameplay.json`: warm the ambient environment temperature range from −6…0°C to **0…3°C** (all twelve monthly `environmentMinTemps`/`environmentMaxTemps` values).
 ### Deprecated
 ### Removed
 ### Fixed
