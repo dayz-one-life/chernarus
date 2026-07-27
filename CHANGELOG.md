@@ -13,6 +13,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 ### Security
 
+## [2.1.0] - 2026-07-27
+
+### Changed
+- `cfggameplay.json`: disable free-form "build anywhere" base building — all 14 `disable*` booleans in `HologramData` (11) and `ConstructionData` (3) flipped back to `false`, restoring vanilla placement/construction checks.
+
+### Removed
+- Custom minimal fresh-spawn loadout: deleted `custom/loadout.json` and emptied `spawnGearPresetFiles` in `cfggameplay.json` — players spawn with vanilla default gear again.
+
 ## [2.0.3] - 2026-07-27
 
 ### Changed
