@@ -13,6 +13,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 ### Security
 
+## [2.2.1] - 2026-07-28
+
+### Changed
+- `db/events.xml`: set `nominal` and `min` to 1 on all seven vehicle events (VehicleBoat, VehicleCivilianSedan, VehicleHatchback02, VehicleOffroad02, VehicleOffroadHatchback, VehicleSedan02, VehicleTruck01) — the economy now targets ~1 of each vehicle type on the map; `max` and child entries unchanged.
+
 ## [2.2.0] - 2026-07-28
 
 ### Added
