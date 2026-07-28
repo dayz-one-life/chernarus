@@ -1,22 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <messages>
-    <!-- New-player onboarding rotation: each message fires <delay> minutes after a
-         player connects (onconnect) and repeats every 10 minutes for everyone online.
-         Delays are staggered 2/4/6/8/10 so a fresh player sees the rules + the way
-         back within their first ~10 minutes, starting 2 minutes after they connect.
-         Themes interleave: rules -> way-back -> website. -->
-
-    <!-- Rules (the stakes) -->
     <message>
-        <onconnect>1</onconnect>
         <repeat>5</repeat>
-        <text>One life. One death. A 24-hour timeout to think it over. Welcome to Chernarus.</text>
-    </message>
-
-    <!-- Website link (unban tokens + leaderboard) -->
-    <message>
-        <onconnect>1</onconnect>
-        <repeat>5</repeat>
-        <text>Join the pack: dayzonelife.com - earn and spend unban tokens, climb the leaderboard.</text>
+        <text>One Life is better with the app. https://dayzonelife.com</text>
     </message>
 </messages>
