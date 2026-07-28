@@ -7,16 +7,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+### Changed
+### Deprecated
+### Removed
+### Fixed
+### Security
+
+## [2.2.0] - 2026-07-27
+
+### Added
 - `docs/tools/halve_preset_chances.py`: deterministic transform that halves preset-level chances (re-runnable on a fresh upstream drop; XML-parse-based count check).
+
 ### Changed
 - `env/zombie_territories.xml`: revert the zed buff — restore vanilla zone `dmin`/`dmax` (file is now byte-identical to Bohemia's upstream), removing the +1 density applied since 1.2.0.
 - `cfggameplay.json`: revert the climate tweak — restore vanilla seasonal `environmentMinTemps`/`environmentMaxTemps` (−3…26°C across the year), replacing the flat 0…3°C range.
 - `cfgrandompresets.xml`: cut the preset-level `chance` on all 75 active `<cargo>`/`<attachments>` presets by 50% (3 already-disabled presets untouched; per-item chances unchanged).
-### Deprecated
+
 ### Removed
 - `docs/tools/road-to-badlands/buff_zeds.py`: retired — the zed buff it re-derived no longer exists, and keeping it risked silently re-applying the buff on the next upstream merge.
-### Fixed
-### Security
 
 ## [2.1.0] - 2026-07-27
 
