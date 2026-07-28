@@ -5,12 +5,11 @@
 		"disableBaseDamage": false,
 		"disableContainerDamage": false,
 		"disableRespawnDialog": false,
-		"disableRespawnInUnconsciousness": true
+		"disableRespawnInUnconsciousness": false
 	},
     "PlayerData":
 	{
-		"spawnGearPresetFiles": [],
-		"disablePersonalLight": true,
+		"disablePersonalLight": false,
 		"StaminaData":
 		{
 			"sprintStaminaModifierErc": 1.0,

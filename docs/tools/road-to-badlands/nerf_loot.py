@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""Halve nominal/min (round up) on every <type> in db/types.xml except
-types flagged deloot="1" or carrying a <usage name="ContaminatedArea"/>."""
+"""Halve nominal/min (round up) on every <type> in db/types.xml."""
 import re
 import sys
 
@@ -11,8 +10,6 @@ def ceil_half(n: int) -> int:
 
 def nerf_block(m: re.Match) -> str:
     block = m.group(0)
-    if 'deloot="1"' in block or '<usage name="ContaminatedArea"' in block:
-        return block
     block = re.sub(r'(<nominal>)(\d+)(</nominal>)',
                    lambda x: f'{x.group(1)}{ceil_half(int(x.group(2)))}{x.group(3)}', block)
     block = re.sub(r'(<min>)(\d+)(</min>)',
