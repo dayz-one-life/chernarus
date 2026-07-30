@@ -8,11 +8,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 ### Changed
-- Reset the entire mission to vanilla Road to Badlands values: revert the loot nerf (`db/types.xml`), the vehicle event tuning (`db/events.xml`), and the preset-chance cut (`cfgrandompresets.xml`). Every mission file is now byte-identical to Bohemia's upstream **except** `db/globals.xml` and `db/messages.xml`, which come from the maintained custom copies in the parent folder (shorter flag refresh, idle-mode tweaks, `LootDamageMin` 0.25, no time-hopping/login penalties; app-promo broadcast).
 ### Deprecated
 ### Removed
 ### Fixed
 ### Security
+
+## [2.2.2] - 2026-07-30
+
+### Changed
+- Reset the entire mission to vanilla Road to Badlands values: revert the loot nerf (`db/types.xml`), the vehicle event tuning (`db/events.xml`), and the preset-chance cut (`cfgrandompresets.xml`). Every mission file is now byte-identical to Bohemia's upstream **except** `db/globals.xml` and `db/messages.xml`, which come from the maintained custom copies in the parent folder (shorter flag refresh, idle-mode tweaks, `LootDamageMin` 0.25, no time-hopping/login penalties; app-promo broadcast).
 
 ## [2.2.1] - 2026-07-28
 
