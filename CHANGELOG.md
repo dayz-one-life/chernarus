@@ -8,11 +8,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 ### Changed
-- `cfggameplay.json`: enable **build anywhere** — every boolean in `BaseBuildingData` is now `true` (all eleven `HologramData` placement checks and all three `ConstructionData` checks). Players can place and build through collision, roof, terrain, angle, height, underwater, cold-area, and distance restrictions. Note that `disableIsPlacementPermittedCheck` also drops territory ownership enforcement, so kits can be placed inside other players' flag territories. `disallowedTypesInUnderground` is unchanged (FenceKit, TerritoryFlagKit, WatchtowerKit still blocked underground).
 ### Deprecated
 ### Removed
 ### Fixed
 ### Security
+
+## [2.3.0] - 2026-08-01
+
+### Changed
+- `cfggameplay.json`: enable **build anywhere** — every boolean in `BaseBuildingData` is now `true` (all eleven `HologramData` placement checks and all three `ConstructionData` checks). Players can place and build through collision, roof, terrain, angle, height, underwater, cold-area, and distance restrictions. Note that `disableIsPlacementPermittedCheck` also drops territory ownership enforcement, so kits can be placed inside other players' flag territories. `disallowedTypesInUnderground` is unchanged (FenceKit, TerritoryFlagKit, WatchtowerKit still blocked underground).
 
 ## [2.2.2] - 2026-07-30
 
